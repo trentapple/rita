@@ -649,9 +649,9 @@ __gather_zeek() {
     fi
 
     _ZEEK_BIN_INSTALLED=false
-    if [ -z "$_ZEEK_PATH" ] && [ -n "$(type -pf zeek)" ]; then
+    if [ -z "$_ZEEK_PATH" ] && [ -n "$(command -v zeek)" ]; then
         _ZEEK_BIN_INSTALLED=true
-        _ZEEK_PATH="$(dirname "$(type -pf zeek)")"
+        _ZEEK_PATH="$(dirname "$(command -v zeek)")"
     fi
 
     _ZEEK_INSTALLED=false
@@ -678,7 +678,7 @@ __gather_zeek() {
     fi
 
     _ZEEK_IN_PATH=false
-    if [ -n "$(type -pf zeek)" ]; then
+    if [ -n "$(command -v zeek)" ]; then
         _ZEEK_IN_PATH=true
     fi
 }
