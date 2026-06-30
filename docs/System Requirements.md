@@ -1,7 +1,7 @@
 # System Requirements
 
-* Operating System - The preferred platform is 64-bit Ubuntu 18.04 LTS. The system should be patched and up to date using apt-get.
-  * The automated installer will also support Security Onion and CentOS 7. You can install on other operating systems using [docker](Docker%20Usage.md) or our [manual installation](Manual%20Installation.md).
+* Operating System - The preferred platform is 64-bit Ubuntu LTS. The system should be patched and up to date using apt-get.
+  * The automated installer also supports Security Onion 3 deployments, Debian 11/12, and CentOS 7. You can install on other operating systems using [docker](Docker%20Usage.md) or our [manual installation](Manual%20Installation.md).
 
 If RITA is used on a separate system from Zeek our recommended specs are:
 * Processor - Two or more cores. RITA uses parallel processing and benefits from more CPU cores.

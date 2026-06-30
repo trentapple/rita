@@ -216,7 +216,7 @@ __install_installer_deps() {
 }
 
 __install_zeek_ubuntu() {
-    if [[ "$_OS_CODENAME" == "focal" || "$_OS_CODENAME" == "jammy" ]]; then 
+    if [[ "$_OS_CODENAME" == "focal" || "$_OS_CODENAME" == "jammy" || "$_OS_CODENAME" == "noble" ]]; then 
         __add_deb_repo "deb [ arch=$(dpkg --print-architecture) ] http://download.opensuse.org/repositories/security:/zeek/xUbuntu_$(lsb_release -rs)/ /" \
         "security:zeek" \
         "https://download.opensuse.org/repositories/security:/zeek/xUbuntu_$(lsb_release -rs)/Release.key"
@@ -229,9 +229,14 @@ __install_zeek_ubuntu() {
 
 __install_zeek_debian() {
     if [[ "$_OS_CODENAME" == "bullseye" ]]; then
-        __add_deb_repo  "deb http://download.opensuse.org/repositories/security:/zeek/Debian_11/ /" \
+        __add_deb_repo "deb http://download.opensuse.org/repositories/security:/zeek/Debian_11/ /" \
         "security:zeek" \
-        "https://download.opensuse.org/repositories/security:zeek/Debian_11/Release.key"
+        "https://download.opensuse.org/repositories/security:/zeek/Debian_11/Release.key"
+        __install_packages zeek-lts
+    elif [[ "$_OS_CODENAME" == "bookworm" ]]; then
+        __add_deb_repo "deb http://download.opensuse.org/repositories/security:/zeek/Debian_12/ /" \
+        "security:zeek" \
+        "https://download.opensuse.org/repositories/security:/zeek/Debian_12/Release.key"
         __install_packages zeek-lts
     else
         printf "\nDebian ${_OS_CODENAME} is unsupported by Zeek and cannot be installed.\n"
@@ -632,6 +637,9 @@ __gather_zeek() {
     if __package_installed securityonion-bro; then
         _ZEEK_ONION_INSTALLED=true
         _ZEEK_PATH="/opt/zeek/bin"
+    elif __package_installed securityonion-zeek; then
+        _ZEEK_ONION_INSTALLED=true
+        _ZEEK_PATH="/opt/zeek/bin"
     fi
 
     _ZEEK_SOURCE_INSTALLED=false
@@ -640,8 +648,14 @@ __gather_zeek() {
         _ZEEK_PATH="/usr/local/zeek/bin"
     fi
 
+    _ZEEK_BIN_INSTALLED=false
+    if [ -z "$_ZEEK_PATH" ] && [ -n "$(type -pf zeek)" ]; then
+        _ZEEK_BIN_INSTALLED=true
+        _ZEEK_PATH="$(dirname "$(type -pf zeek)")"
+    fi
+
     _ZEEK_INSTALLED=false
-    if [ $_ZEEK_PKG_INSTALLED = "true" -o $_ZEEK_ONION_INSTALLED = "true" -o $_ZEEK_SOURCE_INSTALLED = "true" ]; then
+    if [ $_ZEEK_PKG_INSTALLED = "true" -o $_ZEEK_ONION_INSTALLED = "true" -o $_ZEEK_SOURCE_INSTALLED = "true" -o $_ZEEK_BIN_INSTALLED = "true" ]; then
         _ZEEK_INSTALLED=true
     fi
 
